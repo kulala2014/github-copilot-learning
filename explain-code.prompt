@@ -1,0 +1,51 @@
+---
+name: explain-code
+description: Provide clear, in-depth code explanations for developers at different skill levels
+params:
+  - name: audience_level
+    description: Target audience skill level (beginner, intermediate, advanced)
+    default: 'intermediate'
+---
+
+Provide a clear and comprehensive explanation of the selected code.
+
+**Target Audience:** {{audience_level}}
+
+**Explanation Requirements:**
+
+1. **📋 Code Overview**
+   - What is the main functionality of this code?
+   - What problem does it solve?
+   - What role does it play in the project?
+
+2. **🔍 Step-by-Step Breakdown**
+   - Break down main components or functions in execution order
+   - Explain the purpose of each key step
+   - Describe how data flows through the code
+
+3. **💡 Key Concepts**
+   - Explain technical terms used in the code
+   - Describe design patterns or programming paradigms
+   - Explain why it's designed this way
+
+4. **🎯 Usage Examples**
+   - How to call or use this code
+   - Meaning and types of input parameters
+   - Expected output or behavior
+
+5. **⚠️ Important Notes**
+   - Potential pitfalls or common mistakes
+   - Performance considerations
+   - Edge cases and error handling
+
+6. **🚀 Practical Applications**
+   - Common use cases
+   - When to use this code
+   - Possible extensions or improvements
+
+**Output Style:**
+- Use clear, concise language
+- Adjust technical depth based on {{audience_level}}
+- Avoid unnecessary jargon
+- Include code comments and examples
+- Use Markdown formatting for readability
