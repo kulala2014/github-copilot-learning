@@ -1,0 +1,23 @@
+When writing code, follow these style guidelines to ensure consistency and readability across the project:
+- Use 2 spaces for indentation instead of tabs.
+- Limit lines to a maximum of 80 characters.  
+- Use camelCase for variable and function names.
+- Use PascalCase for class names.
+- Always use semicolons at the end of statements.
+- Use single quotes for strings unless the string contains a single quote that would require escaping.
+- Place opening braces on the same line as the control statement or function declaration.
+- Include a space after keywords like `if`, `for`, `while`, and before the
+opening parenthesis.
+- Use descriptive names for variables and functions to enhance code readability.
+- Add comments to explain complex logic, but avoid over-commenting obvious code.
+- Organize imports at the top of the file, grouped by external and internal modules.
+- Ensure consistent spacing around operators (e.g., `=`, `+`, `-`, `===`).
+- Write unit tests for new features and bug fixes to maintain code quality.
+- Regularly run a linter to catch style violations and maintain code quality.
+- Follow the project's specific conventions for error handling and logging.
+- Keep functions small and focused on a single task to enhance maintainability.
+- Add descriptive JSDoc comments for public APIs and complex functions.
+- Include input validation and error handling in functions to ensure robustness.
+- Use early returns for error conditions to reduce nested code and improve readability.
+- Add meaningful variable and function names that convey purpose clearly.
+- Include at least one example usage in comments for complex functions or classes.
