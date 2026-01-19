@@ -279,7 +279,85 @@ description: Testing standards
    - 范围：所有文件 (`applyTo: "**"`)
    - 功能：自动扫描新代码的安全问题
 
-## 八、总结
+
+## 八、指令文件的分类与创建指南
+
+在 VS Code 中，你可以使用两种类型的自定义指令：
+
+### 1. 指令文件类型对比
+
+| 类型 | 说明 | 文件位置 | 适用场景 |
+|------|------|----------|----------|
+| **仓库级通用指令**<br>(Repository-wide) | 应用于仓库上下文中的**所有**请求 | `.github/copilot-instructions.md` | 项目通用的代码风格、架构原则、核心依赖说明 |
+| **路径特定指令**<br>(Path-specific) | 仅应用于匹配特定路径的文件 | `.github/instructions/*.instructions.md` | 特定语言规范（如 TS vs Python）、特定模块规则（如 API vs UI）、测试文件规范 |
+
+> **提示**：使用路径特定指令可以避免将所有规则都塞进通用指令文件中，防止通用指令过于臃肿，同时确保规则只在相关的上下文生效。
+
+### 2. 创建仓库级通用指令
+
+1. 在仓库根目录下，创建 `.github/copilot-instructions.md` 文件（如果 `.github` 目录不存在需先创建）。
+2. 在文件中使用 Markdown 格式编写自然语言指令。
+   - 指令之间可以换行或空行分隔，建议使用清晰的段落。
+
+### 3. 创建路径特定指令
+
+1. 创建 `.github/instructions` 目录（如果不存在）。
+2. 创建一个或多个 `NAME.instructions.md` 文件。
+   - `NAME` 应体现指令的用途（如 `code_style`、`test_rules`）。
+   - 文件名必须以 `.instructions.md` 结尾。
+3. **关键步骤**：在文件开头添加 Frontmatter 配置块，使用 `applyTo` 字段指定应用范围。
+
+#### 配置示例：
+
+**应用到特定目录：**
+```yaml
+---
+applyTo: "app/models/**/*.rb"
+---
+```
+
+**应用到多种文件类型（用逗号分隔）：**
+```yaml
+---
+applyTo: "**/*.ts,**/*.tsx"
+---
+```
+
+### 4. 文件匹配模式详解 (Glob Syntax)
+
+`applyTo` 字段支持 Glob 语法，常见模式如下：
+
+- `*` : 匹配当前目录下的所有文件。
+- `**` 或 `**/*` : 匹配所有目录下的所有文件（递归）。
+- `*.py` : 匹配当前目录下的所有 .py 文件。
+- `**/*.py` : 匹配所有目录下的所有 .py 文件（递归）。
+- `src/*.py` : 仅匹配 `src` 根目录下的 .py 文件（不含子目录）。
+- `src/**/*.py` : 匹配 `src` 目录及其所有子目录下的 .py 文件。
+- `**/subdir/**/*.py` : 匹配任意深度下名为 `subdir` 目录中的 .py 文件。
+
+### 5. 高级配置：排除特定 Agent
+
+如果希望指令仅对 **Copilot Chat (Coding Agent)** 生效，或者仅对 **Code Review** 生效，可以使用 `excludeAgent` 字段。
+
+可选值：`"code-review"` 或 `"coding-agent"`。
+
+**示例：仅让 Coding Agent 读取（排除 Code Review）**
+```yaml
+---
+applyTo: "**"
+excludeAgent: "code-review"
+---
+```
+*注：如果不指定 `excludeAgent`，指令默认对两者都生效。*
+
+### 6. 编写建议
+
+在 Markdown 文件正文中编写具体规则时：
+- 使用清晰的自然语言。
+- 可以分点列出（Bullet points）。
+- 空白字符会被忽略，因此可以自由排版以提高可读性。
+
+## 九、总结
 
 ### Instruction Files 的价值
 
