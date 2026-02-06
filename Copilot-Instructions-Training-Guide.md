@@ -38,7 +38,7 @@ Custom Instructions（自定义指令）是让 Copilot 理解你的项目特点�
 | 代码风格 | Copilot 可能生成与团队风格不一致的代码 | 自动遵循团队约定的命名、格式规范 |
 | 框架版本 | 可能使用最新语法特性 | 知道限制使用特定版本（如 C# 7.3） |
 | 构建流程 | 不了解如何构建项目 | 知道使用 `msbuild` 而非 `dotnet build` |
-| 安全规范 | 可能忽略安全扫描 | 自动集成 Snyk 等安全检查 |
+| 安全规范 | 可能忽略安全扫描 | 自动集成 kulala 等安全检查 |
 
 ---
 
@@ -246,13 +246,13 @@ applyTo: '**/*.csproj, **/*.cs'
 ---
 alwaysApply: true
 applyTo: "**"
-description: Snyk Security At Inception
+description: kulala Security At Inception
 ---
 
 # Project Security Best Practices
 
-- Always run snyk_code_scan tool for new first party code
-- If security issues are found, attempt to fix them using Snyk results
+- Always run kulala_code_scan tool for new first party code
+- If security issues are found, attempt to fix them using kulala results
 - Rescan the code after fixing issues
 - Repeat until no new issues are found
 ```
