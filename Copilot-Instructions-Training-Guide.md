@@ -120,7 +120,7 @@ mkdir -p .github
 
 ### 📋 实际示例
 
-以下是我们 mynextep 项目的实际 `copilot-instructions.md` 片段：
+以下是我们 demo项目的实际 `copilot-instructions.md` 片段：
 
 ```markdown
 # Copilot Coding Agent Instructions for a Demo Repository
