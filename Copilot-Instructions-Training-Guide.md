@@ -38,7 +38,7 @@ Custom Instructions（自定义指令）是让 Copilot 理解你的项目特点�
 | 代码风格 | Copilot 可能生成与团队风格不一致的代码 | 自动遵循团队约定的命名、格式规范 |
 | 框架版本 | 可能使用最新语法特性 | 知道限制使用特定版本（如 C# 7.3） |
 | 构建流程 | 不了解如何构建项目 | 知道使用 `msbuild` 而非 `dotnet build` |
-| 安全规范 | 可能忽略安全扫描 | 自动集成 kulala 等安全检查 |
+| 安全规范 | 可能忽略安全扫描 | 自动集成 Snyk 等安全检查 |
 
 ---
 
@@ -120,16 +120,16 @@ mkdir -p .github
 
 ### 📋 实际示例
 
-以下是我们 demo项目的实际 `copilot-instructions.md` 片段：
+以下是我们 mynextep 项目的实际 `copilot-instructions.md` 片段：
 
 ```markdown
-# Copilot Coding Agent Instructions for a Demo Repository
+# Copilot Coding Agent Instructions for mynextep Repository
 
 ## High-Level Details
 
 ### Repository Summary
-This repository contains Kullala personal github, a comprehensive .NET Framework-based 
-**demo service system**. It includes multiple C# projects for handling 
+This repository contains the NEXTEP Gateway, a comprehensive .NET Framework-based 
+**food service management system**. It includes multiple C# projects for handling 
 restaurant operations, order processing, kitchen communication...
 
 ### Repository Information
@@ -143,7 +143,7 @@ restaurant operations, order processing, kitchen communication...
 ## Build Instructions
 
 ### Build
-1. **Build Solution**: `msbuild demo.sln /p:Configuration=Debug`
+1. **Build Solution**: `msbuild mynextep.sln /p:Configuration=Debug`
    - Configurations available: Debug, Release, QA, Prod.
 ```
 
@@ -246,13 +246,13 @@ applyTo: '**/*.csproj, **/*.cs'
 ---
 alwaysApply: true
 applyTo: "**"
-description: kulala Security At Inception
+description: Snyk Security At Inception
 ---
 
 # Project Security Best Practices
 
-- Always run kulala_code_scan tool for new first party code
-- If security issues are found, attempt to fix them using kulala results
+- Always run snyk_code_scan tool for new first party code
+- If security issues are found, attempt to fix them using Snyk results
 - Rescan the code after fixing issues
 - Repeat until no new issues are found
 ```
@@ -300,6 +300,30 @@ excludeAgent: "code-review" # 排除特定 agent（可选值：code-review, codi
 创建可复用的提示模板，用于常见的开发任务。
 
 > ⚠️ **注意**：Prompt 文件目前仅在 VS Code、Visual Studio 和 JetBrains IDE 中支持。
+
+### 💡 Prompt 文件 vs Instructions 文件
+
+在学习 Prompt 文件之前，先理解它与 Instructions 的区别：
+
+| 对比项 | Instructions | Prompt Files |
+|--------|-------------|--------------|
+| **作用** | 告诉 Copilot **项目是什么样的** | 告诉 Copilot **要做什么任务** |
+| **内容** | 技术栈、版本限制、编码规范 | 任务步骤、检查清单、模板 |
+| **应用** | 自动应用到所有 Copilot 请求 | 需要手动选择使用 |
+| **示例** | "项目使用 C# 7.3" | "创建单元测试的 5 个步骤" |
+| **更新频率** | 较少（项目框架改变时） | 较多（优化工作流程） |
+
+**形象比喻**：
+- **Instructions** = 项目的"身份证"（告诉 Copilot 你是谁）
+- **Prompt Files** = 任务的"操作手册"（告诉 Copilot 怎么做）
+
+**两者配合使用**：
+```
+你的请求 → [自动加载 Instructions] + [手动选择 Prompt] → Copilot
+            "项目用 .NET Framework"  "按这个清单审查代码"
+                                    ↓
+                    既符合项目规范，又完成具体任务
+```
 
 ### 📍 文件位置
 ```
@@ -411,7 +435,21 @@ excludeAgent: "code-review" # 排除特定 agent（可选值：code-review, codi
 5. 根据需要添加额外上下文
 6. 发送消息
 
----
+> 💡 **重要说明**：当你使用 Prompt 文件时，Repository Instructions（copilot-instructions.md 和匹配的 *.instructions.md）仍然会**自动应用**。这意味着：
+> - Prompt 文件提供任务的具体要求（如"创建单元测试"）
+> - Instructions 提供项目的上下文和约束（如"使用 C# 7.3"、"遵循 xUnit 规范"）
+> - 两者叠加使用，让 Copilot 既了解任务又遵循项目规范
+>
+> **示例**：使用 code-review.prompt.md 时
+> ```
+> [自动包含] copilot-instructions.md → 项目技术栈、构建方式
+> [自动包含] dotnet-framework.instructions.md → C# 版本限制
+> [手动选择] code-review.prompt.md → 代码审查检查清单
+> [你的输入] 附加的代码文件
+>            ↓
+>        全面的代码审查（既检查通用问题，又符合项目规范）
+> ```
+
 
 ## 6. 高级篇：Agent 指令文件
 
@@ -626,7 +664,35 @@ Copilot 会综合考虑所有适用的指令。如果有明确冲突，优先级
 
 指令文件是仓库的一部分，不同分支可以有不同的指令内容。Copilot 会使用当前分支的指令文件。
 
----
+### Q6: 使用 Prompt 文件时，Instructions 还会生效吗？
+
+**会的！** Instructions 和 Prompt 文件是互补的，不是互斥的：
+
+| 文件类型 | 应用方式 | 作用 | 示例 |
+|---------|---------|------|------|
+| **Instructions** | 自动应用 | 提供项目上下文和通用规范 | "使用 C# 7.3"、"用 msbuild 构建" |
+| **Prompt Files** | 手动选择 | 提供特定任务的详细要求 | "创建单元测试的步骤" |
+
+**实际场景**：
+```
+你有这些文件：
+- .github/copilot-instructions.md (项目是 .NET Framework)
+- .github/instructions/testing.instructions.md (使用 xUnit)
+- .github/prompts/create-test.prompt.md (单元测试模板)
+
+当你使用 create-test.prompt.md 时：
+✅ copilot-instructions.md → 自动应用
+✅ testing.instructions.md → 自动应用（如果匹配当前文件）
+✅ create-test.prompt.md → 手动选择使用
+
+结果：Copilot 生成的测试符合项目框架要求（.NET Framework + xUnit），
+    并遵循你 prompt 中的具体结构要求
+```
+
+**最佳实践**：
+- Instructions：写项目的**通用规则**（技术栈、版本限制、编码规范）
+- Prompt：写**具体任务**的详细步骤（如何创建测试、如何审查代码）
+
 
 ## 10. 实战练习
 
