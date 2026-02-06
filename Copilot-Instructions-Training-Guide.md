@@ -123,13 +123,13 @@ mkdir -p .github
 以下是我们 mynextep 项目的实际 `copilot-instructions.md` 片段：
 
 ```markdown
-# Copilot Coding Agent Instructions for mynextep Repository
+# Copilot Coding Agent Instructions for a Demo Repository
 
 ## High-Level Details
 
 ### Repository Summary
-This repository contains the NEXTEP Gateway, a comprehensive .NET Framework-based 
-**food service management system**. It includes multiple C# projects for handling 
+This repository contains Kullala personal github, a comprehensive .NET Framework-based 
+**demo service system**. It includes multiple C# projects for handling 
 restaurant operations, order processing, kitchen communication...
 
 ### Repository Information
@@ -143,7 +143,7 @@ restaurant operations, order processing, kitchen communication...
 ## Build Instructions
 
 ### Build
-1. **Build Solution**: `msbuild mynextep.sln /p:Configuration=Debug`
+1. **Build Solution**: `msbuild demo.sln /p:Configuration=Debug`
    - Configurations available: Debug, Release, QA, Prod.
 ```
 
